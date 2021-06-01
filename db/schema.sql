@@ -27,18 +27,16 @@ USE employee_db;
 
 CREATE TABLE departments (
     id INT NOT NULL AUTO_INCREMENT,
-    name VARCHAR (30) NOT NULL,
-    PRIMARY KEY(id),
-);
+    department_name VARCHAR (30) NOT NULL,
+    PRIMARY KEY(id));
 
 CREATE TABLE roles (
     id INT NOT NULL AUTO_INCREMENT,
-    title VARCHAR (30) NOT NULL,
+    title VARCHAR (50) NOT NULL,
     salary DECIMAL NOT NULL,
     department_id INT NOT NULL,
     FOREIGN KEY (department_id) REFERENCES departments(id),
-    PRIMARY KEY(id),
-);
+    PRIMARY KEY(id));
 
 CREATE TABLE employees (
     id INT NOT NULL AUTO_INCREMENT,
@@ -48,6 +46,4 @@ CREATE TABLE employees (
     FOREIGN KEY (role_id) REFERENCES roles(id),
     manager_id INT,
     FOREIGN KEY (manager_id) REFERENCES employees(id),
-    PRIMARY KEY(id),
-);
-
+    PRIMARY KEY(id));

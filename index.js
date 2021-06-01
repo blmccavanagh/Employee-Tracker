@@ -69,9 +69,9 @@ function accessDb() {
                 break;
 
             //  don't need to make a quit case, as the default already does this if quit is selected (because no other case was selected : works like 'else')
-            default:
-                connection.end();
-                break;
+            // default:
+            //     connection.end();
+            //     break;
         }
     });
 };
@@ -110,18 +110,18 @@ function createDepartment() {
     inquirer.prompt([
         {
             type: 'input',
-            name: 'name',
+            name: 'department_name',
             message: 'What is the name of the department you are creating?'
         }
     ]).then((data) => {
         connection.query(
             'INSERT INTO departments SET ?',
             {
-                name: data.name
+                name: data.department_name
             },
             (err, res) => {
                 if (err) throw err;
-                console.log(`${data.name} department created.\n`);
+                console.log(`${data.department_name} department created.\n`);
                 // take the user back to the beginning after they've created a department
                 accessDb();
             }
@@ -198,16 +198,16 @@ function createEmployee() {
     });
 };
 
-function updateDepartment() {
+// function updateDepartment() {
 
-};
+// };
 
-function updateRole() {
+// function updateRole() {
 
-};
+// };
 
-function updateEmployee() {
+// function updateEmployee() {
 
-};
+// };
 
 accessDb();
