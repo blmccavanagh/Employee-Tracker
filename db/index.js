@@ -77,15 +77,33 @@ function accessDb() {
 };
 
 function viewDepartment() {
-
+    connection.query('SELECT * FROM departments', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        console.log(`\n`);
+        // take them back to the beginning after they've received the data they asked for
+        accessDb();
+    });
 };
 
 function viewRole() {
-
+    connection.query('SELECT * FROM roles', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        console.log(`\n`);
+        // take them back to the beginning after they've received the data they asked for
+        accessDb();
+    });
 };
 
 function viewEmployee() {
-
+    connection.query('SELECT * FROM employees', (err, res) => {
+        if (err) throw err;
+        console.table(res);
+        console.log(`\n`);
+        // take them back to the beginning after they've received the data they asked for
+        accessDb();
+    });
 };
 
 function createDepartment() {
