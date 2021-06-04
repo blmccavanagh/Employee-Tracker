@@ -8,6 +8,9 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
+
+// look at using async await syntax
+// wait till connection, when connected then continue
 connection.connect((err) => {
     if (err) throw err;
     console.log(`connected as id ${connection.threadId}`);

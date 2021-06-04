@@ -1,5 +1,5 @@
-INSERT INTO departments(department_name) VALUES ("Administrator"),("Accounting"),("Sales"),("IT"),("Executive");
+INSERT INTO departments(department_name) VALUES ("Administration"),("Education"),("Executive"),("Hospitality"),("HR"),("IT"),("Sales");
 
-INSERT INTO roles(title, salary, department_id) VALUES ("Admin Assistant", 60000, 1),("Accountant", 90000, 2),("Customer Service Officer", 75000, 3),("Statistical Analysis and Data Reconfiguration", 100000, 4),("Solution Architect", 140000, 4),("CEO", 220000, 5);
+INSERT INTO roles(title, salary, department_id) VALUES ("Puppet Master", 60000, 3),("Professor", 90000, 2),("Assistant Buyer", 75000, 7),("Statistical Analysis and Data Reconfiguration", 100000, 6),("Head Chef", 140000, 4),("Chief Cologne Sprayer", 220000, 3);
 
-INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("Joey", "Tribbiani", 6, NULL),("Monica", "Gellar", 5, 1),("Chanandeler", "Bong", 4, 1),("Phoebe", "Buffay", 3, NULL),("Rachel", "Green", 2, 2),("Ross", "Gellar", 1, 4);
+INSERT INTO employees(first_name, last_name, role_id, manager_id) VALUES ("Joey", "Tribbiani", 6, NULL),("Monica", "Geller", 5, 1),("Chanandeler", "Bong", 4, 1),("Ross", "Geller", 2, 2),("Rachel", "Green", 3, 1),("Phoebe", "Buffay", 1, NULL);

@@ -1,5 +1,7 @@
+require('dotenv').config();
 const connection = require('./config/connection');
 const inquirer = require('inquirer');
+
 // can install npm i console.table at a later date
 // require('console.table');
 
@@ -17,9 +19,9 @@ function accessDb() {
                 'Create a Department',
                 'Create a Role',
                 'Create an Employee',
-                'Update a Department',
-                'Update a Role',
-                'Update an Employee',
+                // 'Update a Department',
+                // 'Update a Role',
+                // 'Update an Employee',
                 'Quit'
             ]
         }
@@ -56,22 +58,21 @@ function accessDb() {
                 createEmployee();
                 break;
 
-            case 'Update a Department':
-                updateDepartment();
-                break;
-
-            case 'Update a Role':
-                updateRole();
-                break;
-
-            case 'Update an Employee':
-                updateEmployee();
-                break;
-
-            //  don't need to make a quit case, as the default already does this if quit is selected (because no other case was selected : works like 'else')
-            // default:
-            //     connection.end();
+            // case 'Update a Department':
+            //     updateDepartment();
             //     break;
+
+            // case 'Update a Role':
+            //     updateRole();
+            //     break;
+
+            // case 'Update an Employee':
+            //     updateEmployee();
+            //     break;
+
+            case 'Quit':
+                connection.end();
+                break;
         }
     });
 };
