@@ -107,31 +107,97 @@ function viewEmployee() {
     });
 };
 
-function createDepartment() {
-    inquirer.prompt([
+// function createDepartment() {
+//     inquirer.prompt([
+//         {
+//             type: 'input',
+//             name: 'department_name',
+//             message: 'What is the name of the department you are creating?'
+//         }
+//     ]).then((data) => {
+//         connection.query(
+//             'INSERT INTO departments (department_name) VALUES (?)',
+//             [
+//                 data.department_name
+//             ],
+//             (err, res) => {
+//                 if (err) throw err;
+//                 console.log(`${data.department_name} department created.\n`);
+//                 // take the user back to the beginning after they've created a department
+//                 accessDb();
+//             }
+//         );
+//     });
+// };
+
+async function createDepartment() {
+    const newDepartment = await inquirer.prompt([
         {
             type: 'input',
             name: 'department_name',
             message: 'What is the name of the department you are creating?'
         }
-    ]).then((data) => {
+    ]);
+
+    try {
         connection.query(
-            'INSERT INTO departments SET ?',
-            {
-                name: data.department_name
-            },
-            (err, res) => {
-                if (err) throw err;
-                console.log(`${data.department_name} department created.\n`);
-                // take the user back to the beginning after they've created a department
-                accessDb();
-            }
+            'INSERT INTO departments (department_name) VALUES (?)',
+            [
+                newDepartment.department_name
+            ],
         );
-    });
+        console.log(`${newDepartment.department_name} department created.\n`);
+        accessDb();
+    } catch (error) {
+        console.error(error);
+        createDepartment();
+    }
 };
 
-function createRole() {
-    inquirer.prompt([
+// function createRole() {
+//     inquirer.prompt([
+//         {
+//             type: 'input',
+//             name: 'title',
+//             message: 'What is the title of the role you are creating?'
+//         },
+//         {
+//             type: 'number',
+//             name: 'salary',
+//             message: 'How much is the salary for this role?'
+//         },
+//         {
+//             type: 'number',
+//             name: 'department_id',
+//             message: 'What is the department ID for this role?'
+//         }
+//     ]).then((data) => {
+//         connection.query(
+//             'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+//             [
+//                 data.title,
+//                 data.salary,
+//                 data.department_id
+//             ],
+//             (err, res) => {
+//                 if (err) throw err;
+//                 console.log(`${data.title} role created.\n`);
+//                 accessDb();
+//             }
+//         );
+//     });
+// };
+
+async function createRole() {
+    const departmentsTableData = await connection.query('SELECT * FROM departments');
+
+    console.log(departmentsTableData);
+
+    const departmentsArray = await departmentsTableData.map((departments) => ({
+        name: departments.department_name,
+        value: departments.department_id,
+    }));
+    const newRole = await inquirer.prompt([
         {
             type: 'input',
             name: 'title',
@@ -143,25 +209,28 @@ function createRole() {
             message: 'How much is the salary for this role?'
         },
         {
-            type: 'number',
+            type: 'list',
             name: 'department_id',
-            message: 'What is the department ID for this role?'
+            message: 'What department does this role come under?',
+            choices: departmentsArray
         }
-    ]).then((data) => {
-        connection.query(
-            'INSERT INTO roles SET ?',
-            {
-                title: data.title,
-                salary: data.salary,
-                department_id: data.department_id
-            },
-            (err, res) => {
-                if (err) throw err;
-                console.log(`${data.title} role created.\n`);
-                accessDb();
-            }
-        );
-    });
+    ]);
+
+    // try {
+        // connection.query(
+        //     'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+        //     [
+        //         newRole.title,
+        //         newRole.salary,
+        //         newRole.department_id
+        //     ],
+        // );
+        // console.log(`${data.title} role created.\n`);
+        // accessDb();
+    // } catch (error) {
+        // console.error(error);
+        // createRole();
+    // };
 };
 
 function createEmployee() {
@@ -188,7 +257,7 @@ function createEmployee() {
         }
     ]).then((data) => {
         connection.query(
-            'INSERT INTO employees SET?',
+            'INSERT INTO employees (first_name, last_name, role_id, SET ?',
             {
                 first_name: data.first_name,
                 last_name: data.last_name,
