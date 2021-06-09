@@ -5,8 +5,8 @@ const inquirer = require('inquirer');
 // can install npm i console.table at a later date
 // require('console.table');
 
-function accessDb() {
-    inquirer.prompt([
+async function accessDb() {
+    const responseData = await inquirer.prompt([
         {
             type: 'list',
             name: 'action',
@@ -25,56 +25,44 @@ function accessDb() {
                 'Quit'
             ]
         }
-    ]).then((data) => {
-        // switch statement is simpler syntax than if, if you are delivering something specific
-        // function initiated based on answer
+    ]);
 
-        // switch takes in the name from the prompt
-        switch (data.action) {
-            // case for each answer and the function run based on that answer
-            // case is the answer given by the user
-            case 'View Departments':
-                viewDepartment();
-                // break is your stop point, if x === x then do this one thing then stop
-                break;
+    switch (responseData.action) {
+        // case for each answer and the function run based on that answer
+        // case is the answer given by the user
+        case 'View Departments':
+            return viewDepartment();
 
-            case 'View Roles':
-                viewRole();
-                break;
+        case 'View Roles':
+            return viewRole();
 
-            case 'View Employees':
-                viewEmployee();
-                break;
+        case 'View Employees':
+           return viewEmployee();
 
-            case 'Create a Department':
-                createDepartment();
-                break;
+        case 'Create a Department':
+            return createDepartment();
 
-            case 'Create a Role':
-                createRole();
-                break;
+        case 'Create a Role':
+            return createRole();
 
-            case 'Create an Employee':
-                createEmployee();
-                break;
+        case 'Create an Employee':
+            return createEmployee();
 
-            // case 'Update a Department':
-            //     updateDepartment();
-            //     break;
+        // case 'Update a Department':
+        //     return updateDepartment();
+        // 
 
-            // case 'Update a Role':
-            //     updateRole();
-            //     break;
+        // case 'Update a Role':
+        //     return updateRole();
+        // 
 
-            // case 'Update an Employee':
-            //     updateEmployee();
-            //     break;
+        // case 'Update an Employee':
+        //     return updateEmployee();
+        // 
 
-            case 'Quit':
-                connection.end();
-                break;
-        }
-    });
+        case 'Quit':
+            connection.end();
+    }
 };
 
 function viewDepartment() {
@@ -107,29 +95,6 @@ function viewEmployee() {
     });
 };
 
-// function createDepartment() {
-//     inquirer.prompt([
-//         {
-//             type: 'input',
-//             name: 'department_name',
-//             message: 'What is the name of the department you are creating?'
-//         }
-//     ]).then((data) => {
-//         connection.query(
-//             'INSERT INTO departments (department_name) VALUES (?)',
-//             [
-//                 data.department_name
-//             ],
-//             (err, res) => {
-//                 if (err) throw err;
-//                 console.log(`${data.department_name} department created.\n`);
-//                 // take the user back to the beginning after they've created a department
-//                 accessDb();
-//             }
-//         );
-//     });
-// };
-
 async function createDepartment() {
     const newDepartment = await inquirer.prompt([
         {
@@ -154,49 +119,16 @@ async function createDepartment() {
     }
 };
 
-// function createRole() {
-//     inquirer.prompt([
-//         {
-//             type: 'input',
-//             name: 'title',
-//             message: 'What is the title of the role you are creating?'
-//         },
-//         {
-//             type: 'number',
-//             name: 'salary',
-//             message: 'How much is the salary for this role?'
-//         },
-//         {
-//             type: 'number',
-//             name: 'department_id',
-//             message: 'What is the department ID for this role?'
-//         }
-//     ]).then((data) => {
-//         connection.query(
-//             'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
-//             [
-//                 data.title,
-//                 data.salary,
-//                 data.department_id
-//             ],
-//             (err, res) => {
-//                 if (err) throw err;
-//                 console.log(`${data.title} role created.\n`);
-//                 accessDb();
-//             }
-//         );
-//     });
-// };
-
 async function createRole() {
     const departmentsTableData = await connection.query('SELECT * FROM departments');
 
-    console.log(departmentsTableData);
+    // console.log(departmentsTableData);
 
-    const departmentsArray = await departmentsTableData.map((departments) => ({
+    const departmentsArray = departmentsTableData.map((departments) => ({
         name: departments.department_name,
         value: departments.department_id,
     }));
+
     const newRole = await inquirer.prompt([
         {
             type: 'input',
@@ -216,21 +148,21 @@ async function createRole() {
         }
     ]);
 
-    // try {
-        // connection.query(
-        //     'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
-        //     [
-        //         newRole.title,
-        //         newRole.salary,
-        //         newRole.department_id
-        //     ],
-        // );
-        // console.log(`${data.title} role created.\n`);
-        // accessDb();
-    // } catch (error) {
-        // console.error(error);
-        // createRole();
-    // };
+    try {
+    connection.query(
+        'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+        [
+            newRole.title,
+            newRole.salary,
+            newRole.department_id
+        ],
+    );
+    console.log(`${newRole.title} role created.\n`);
+    accessDb();
+    } catch (error) {
+    console.error(error);
+    // createRole();
+    };
 };
 
 function createEmployee() {
