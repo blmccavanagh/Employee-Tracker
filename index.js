@@ -187,6 +187,11 @@ async function createEmployee() {
         value: managers.id,
     }));
 
+    managersArray.unshift({
+        name: "N/A",
+        value: null,
+    });
+
     const newEmployee = await inquirer.prompt([
         {
             type: 'input',
