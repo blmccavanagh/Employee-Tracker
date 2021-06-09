@@ -19,7 +19,7 @@ async function accessDb() {
                 'Create a Department',
                 'Create a Role',
                 'Create an Employee',
-                // 'Update a Department',
+                'Update a Department',
                 // 'Update a Role',
                 // 'Update an Employee',
                 'Quit'
@@ -48,9 +48,9 @@ async function accessDb() {
         case 'Create an Employee':
             return createEmployee();
 
-        // case 'Update a Department':
-        //     return updateDepartment();
-        // 
+        case 'Update a Department':
+            return updateDepartment();
+        
 
         // case 'Update a Role':
         //     return updateRole();
@@ -241,9 +241,41 @@ async function createEmployee() {
     };
 };
 
-// function updateDepartment() {
+async function updateDepartment() {
+    const getDepartments = await connection.query('SELECT * FROM departments');
 
-// };
+    const departmentChoices = getDepartments.map((departments) => ({
+        name: departments.department_name
+    }));
+
+    const updateDepartmentInfo = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'department_selection',
+            message: 'Which department would you like to update?',
+            choices: departmentChoices
+        },
+        {
+            type: 'input',
+            name: 'updated_department',
+            message: 'What is the name of the updated department?'
+        }
+    ]);
+
+    try {
+        connection.query(
+            'UPDATE departments SET department_name = ? WHERE id = ?', [
+            updateDepartmentInfo.updated_department,
+            updateDepartmentInfo.department_selection,
+        ]
+        );
+        console.log(`${updateDepartmentInfo.updated_department} updated.\n`);
+        accessDb();
+    } catch (error) {
+        console.error(error);
+        updateDepartment();
+    };
+};
 
 // function updateRole() {
 
