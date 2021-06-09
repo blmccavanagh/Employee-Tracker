@@ -178,6 +178,8 @@ async function createEmployee() {
         value: roles.id,
     }));
 
+    console.log(rolesArray);
+
     const managerId = await connection.query('SELECT * FROM employees where manager_status is true');
 
     const managersArray = managerId.map((managers) => ({
@@ -197,13 +199,13 @@ async function createEmployee() {
             message: 'Enter last name:'
         },
         {
-            input: 'list',
+            type: 'list',
             name: 'role_id',
             message: 'What is the employee role?',
             choices: rolesArray
         },
         {
-            input: 'confirm',
+            type: 'confirm',
             name: 'manager_status',
             message: 'Is this employee a manager?',
         },
@@ -217,14 +219,14 @@ async function createEmployee() {
 
     try {
         connection.query(
-            'INSERT INTO employees (first_name, last_name, role_id, manager_id, manager_status) VALUES ?',
-            {
-                first_name: newEmployee.first_name,
-                last_name: newEmployee.last_name,
-                role_id: newEmployee.role_id,
-                manager_id: newEmployee.manager_id,
-                manager_status: newEmployee.manager_status
-            }
+            'INSERT INTO employees (first_name, last_name, role_id, manager_id, manager_status) VALUES (?, ?, ?, ?, ?)',
+            [
+                newEmployee.first_name,
+                newEmployee.last_name,
+                newEmployee.role_id,
+                newEmployee.manager_id,
+                newEmployee.manager_status
+            ]
         );
         console.log(`${newEmployee.first_name} ${newEmployee.last_name} created.\n`);
         accessDb();
