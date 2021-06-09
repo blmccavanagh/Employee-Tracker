@@ -46,4 +46,5 @@ CREATE TABLE employees (
     FOREIGN KEY (role_id) REFERENCES roles(id),
     manager_id INT,
     FOREIGN KEY (manager_id) REFERENCES employees(id),
+    manager_status BOOLEAN NOT NULL DEFAULT false,
     PRIMARY KEY(id));

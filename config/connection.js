@@ -9,14 +9,13 @@ const connection = mysql.createConnection({
     database: process.env.DB_NAME
 });
 
-
-// look at using async await syntax
 // wait till connection, when connected then continue
-connection.connect((err) => {
+connection.connect(async (err) => {
     if (err) throw err;
     console.log(`connected as id ${connection.threadId}`);
-  });
+});
 
-  connection.query = util.promisify(connection.query);
+// allows use of promises/asycn + await with mysql
+connection.query = util.promisify(connection.query);
 
-  module.exports = connection;
+module.exports = connection;

@@ -37,7 +37,7 @@ async function accessDb() {
             return viewRole();
 
         case 'View Employees':
-           return viewEmployee();
+            return viewEmployee();
 
         case 'Create a Department':
             return createDepartment();
@@ -124,10 +124,14 @@ async function createRole() {
 
     // console.log(departmentsTableData);
 
+    // changed value: departments.department_id - accessing wrong table info
+
     const departmentsArray = departmentsTableData.map((departments) => ({
         name: departments.department_name,
-        value: departments.department_id,
+        value: departments.id,
     }));
+
+    // console.log(departmentsArray);
 
     const newRole = await inquirer.prompt([
         {
@@ -149,24 +153,39 @@ async function createRole() {
     ]);
 
     try {
-    connection.query(
-        'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
-        [
-            newRole.title,
-            newRole.salary,
-            newRole.department_id
-        ],
-    );
-    console.log(`${newRole.title} role created.\n`);
-    accessDb();
+        connection.query(
+            'INSERT INTO roles (title, salary, department_id) VALUES (?, ?, ?)',
+            [
+                newRole.title,
+                newRole.salary,
+                newRole.department_id
+            ],
+        );
+        console.log(`${newRole.title} role created.\n`);
+        accessDb();
     } catch (error) {
-    console.error(error);
-    // createRole();
+        console.error(error);
+        createRole();
     };
 };
 
-function createEmployee() {
-    inquirer.prompt([
+async function createEmployee() {
+
+    const rolesTableData = await connection.query('SELECT * FROM roles');
+
+    const rolesArray = rolesTableData.map((roles) => ({
+        name: roles.title,
+        value: roles.id,
+    }));
+
+    const managerId = await connection.query('SELECT * FROM employees where manager_status is true');
+
+    const managersArray = managerId.map((managers) => ({
+        name: `${managers.first_name} ${managers.last_name}`,
+        value: managers.id,
+    }));
+
+    const newEmployee = await inquirer.prompt([
         {
             type: 'input',
             name: 'first_name',
@@ -178,26 +197,41 @@ function createEmployee() {
             message: 'Enter last name:'
         },
         {
-            input: 'number',
+            input: 'list',
             name: 'role_id',
-            message: 'What is the role ID for this role?'
+            message: 'What is the employee role?',
+            choices: rolesArray
         },
         {
-            type: 'number',
+            input: 'confirm',
+            name: 'manager_status',
+            message: 'Is this employee a manager?',
+        },
+        {
+            type: 'list',
             name: 'manager_id',
-            message: 'What is the manager ID for this employee?'
+            message: 'Who is the manager for this employee?',
+            choices: managersArray
         }
-    ]).then((data) => {
+    ]);
+
+    try {
         connection.query(
-            'INSERT INTO employees (first_name, last_name, role_id, SET ?',
+            'INSERT INTO employees (first_name, last_name, role_id, manager_id, manager_status) VALUES ?',
             {
-                first_name: data.first_name,
-                last_name: data.last_name,
-                role_id: data.role_id,
-                manager_id: data.manager_id
+                first_name: newEmployee.first_name,
+                last_name: newEmployee.last_name,
+                role_id: newEmployee.role_id,
+                manager_id: newEmployee.manager_id,
+                manager_status: newEmployee.manager_status
             }
         );
-    });
+        console.log(`${newEmployee.first_name} ${newEmployee.last_name} created.\n`);
+        accessDb();
+    } catch (error) {
+        console.error(error);
+        createEmployee();
+    };
 };
 
 // function updateDepartment() {
