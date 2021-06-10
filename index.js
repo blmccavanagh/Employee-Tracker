@@ -269,10 +269,10 @@ async function deleteDepartment() {
     try {
         connection.query(
             'DELETE FROM departments WHERE id = ?', [
-
+            deletedDepartment.id
         ]
         );
-        console.log(`${deletedDepartment} deleted.\n`);
+        console.log(`Department deleted.\n`);
         accessDb();
     } catch (error) {
         console.error(error);
