@@ -254,7 +254,8 @@ async function deleteDepartment() {
     const getDepartments = await connection.query('SELECT * FROM departments');
 
     const departmentChoices = getDepartments.map((departments) => ({
-        name: departments.department_name
+        name: departments.department_name,
+        value: departments.id
     }));
 
     const deletedDepartment = await inquirer.prompt([
@@ -272,7 +273,7 @@ async function deleteDepartment() {
             deletedDepartment.id
         ]
         );
-        console.log(`Department deleted.\n`);
+        console.log(`${deletedDepartment} deleted.\n`);
         accessDb();
     } catch (error) {
         console.error(error);
