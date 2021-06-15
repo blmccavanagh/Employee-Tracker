@@ -15,7 +15,6 @@
   * [Web development technologies](#web-development-technologies)
   * [Challenges](#challenges)
 * [Future Development Opportunities](#future-development-opportunities)
-* [Deployed Application Link:](#deployed-application-link)
 * [Repository Link:](#repository-link)
 * [Application Screenshots:](#application-screenshots)
 
