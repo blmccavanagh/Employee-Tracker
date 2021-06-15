@@ -19,9 +19,9 @@ async function accessDb() {
                 'Create a Department',
                 'Create a Role',
                 'Create an Employee',
-                'Delete a Department',
                 // 'Update a Role',
-                // 'Update an Employee',
+                'Update an Employee',
+                'Delete a Department',
                 'Quit'
             ]
         }
@@ -48,15 +48,11 @@ async function accessDb() {
         case 'Create an Employee':
             return createEmployee();
 
-
-
         // case 'Update a Role':
         //     return updateRole();
-        // 
 
-        // case 'Update an Employee':
-        //     return updateEmployee();
-        // 
+        case 'Update an Employee':
+            return updateEmployee();
 
         case 'Delete a Department':
             return deleteDepartment();
@@ -178,7 +174,7 @@ async function createEmployee() {
         value: roles.id,
     }));
 
-    console.log(rolesArray);
+    // console.log(rolesArray);
 
     const managerId = await connection.query('SELECT * FROM employees where manager_status is true');
 
@@ -241,13 +237,138 @@ async function createEmployee() {
     };
 };
 
-// function updateRole() {
+async function updateEmployee() {
 
-// };
+    const rolesTableData = await connection.query('SELECT * FROM roles');
 
-// function updateEmployee() {
+    const rolesArray = rolesTableData.map((roles) => ({
+        name: roles.title,
+        value: roles.id,
+    }));
 
-// };
+    const managerId = await connection.query('SELECT * FROM employees where manager_status is true');
+
+    const managersArray = managerId.map((managers) => ({
+        name: `${managers.first_name} ${managers.last_name}`,
+        value: managers.id,
+    }));
+
+    managersArray.unshift({
+        name: "N/A",
+        value: null,
+    });
+
+    const getEmployee = await connection.query('SELECT * FROM employees');
+
+    const employeeDetails = getEmployee.map((employees) => ({
+        name: `${employees.first_name} ${employees.last_name}`,
+        value: employees.id
+        // first_name: employees.first_name,
+        // last_name: employees.last_name,
+        // role_id: employees.role_id,
+        // manager_id: employees.manager_id,
+        // manager_status: employees.manager_status
+    }));
+
+    const updatedEmployee = await inquirer.prompt([
+        {
+            type: 'list',
+            name: 'employee_id',
+            message: 'Which employee would you like to update?',
+            choices: employeeDetails
+        },
+        {
+            type: 'confirm',
+            name: 'update_first_name',
+            message: 'Would you like to update their first name?',
+            default: false
+        },
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'Insert first name:',
+            when: (answers) => answers.update_first_name === true,
+        },
+        {
+            type: 'confirm',
+            name: 'update_last_name',
+            message: 'Would you like to update their last name?',
+            default: false
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'Insert last name:',
+            when: (answers) => answers.update_last_name === true
+        },
+        {
+            type: 'confirm',
+            name: 'update_role_name',
+            message: 'Would you like to update their role?',
+            default: false
+        },
+        {
+            type: 'list',
+            name: 'role_id',
+            message: 'What is the employee role?',
+            choices: rolesArray,
+            when: (answers) => answers.update_role_name === true,
+        },
+        {
+            type: 'confirm',
+            name: 'manager_status',
+            message: 'Is this employee a manager?'
+        },
+        {
+            type: 'confirm',
+            name: 'update_manager',
+            message: 'Would you like to update the manager for this employee?',
+            default: false
+        },
+        {
+            type: 'list',
+            name: 'manager_id',
+            message: 'Who is the manager for this employee?',
+            choices: managersArray,
+            when: (answers) => answers.update_manager === true,
+        }]);
+
+        // console.log(updatedEmployee);
+
+        let updatedDetails = {};
+
+        if (updatedEmployee.update_first_name) {
+            updatedDetails.first_name = updatedEmployee.first_name;
+        };
+
+        if (updatedEmployee.update_last_name) {
+            updatedDetails.last_name = updatedEmployee.last_name;
+        };
+
+        if (updatedEmployee.update_role_name) {
+            updatedDetails.role_id = updatedEmployee.role_id;
+        };
+
+        if (updatedEmployee.update_manager_name) {
+            updatedDetails.manager_id = updatedEmployee.manager_id;
+        };
+        
+        try {
+            connection.query(
+                'UPDATE employees SET ? WHERE ?',
+                [
+                    updatedDetails,
+                    {id: updatedEmployee.employee_id}
+                ]
+            );
+            console.log(`Employee updated.\n`);
+            accessDb();
+        } catch (error) {
+            console.error(error);
+            updateEmployee();
+        }
+
+};
 
 // Create DELETE department function not UPDATE
 async function deleteDepartment() {
@@ -262,18 +383,22 @@ async function deleteDepartment() {
         {
             type: 'list',
             name: 'department_selection',
-            message: 'Which department would you like to update?',
+            message: 'Which department would you like to delete?',
             choices: departmentChoices
         }
     ]);
 
+    // console.log(deletedDepartment);
+
+    const deletedDepartmentName = departmentChoices.filter((departments) => departments.value === deletedDepartment.department_selection);
+
     try {
         connection.query(
-            'DELETE FROM departments WHERE id = ?', [
-            deletedDepartment.id
+            'DELETE FROM departments WHERE id = (?)', [
+            deletedDepartment.department_selection
         ]
         );
-        console.log(`${deletedDepartment} deleted.\n`);
+        console.log(`${deletedDepartmentName[0].name} deleted.\n`);
         accessDb();
     } catch (error) {
         console.error(error);

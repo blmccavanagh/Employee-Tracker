@@ -4,7 +4,7 @@
 
 ---
 
-## This application allows for a user to manage their employees within a database, allowing the user to organise their employees into departments, roles and define managers for each employee. The application is interactive, driven by a command line interface while the data is stored in a MySQL database, allowing for future retrieval and modification of the data. The ultimate goal is to allow the user to manage their business users by creating a rudimentary CMS.
+### This application allows for a user to manage their employees within a database, allowing the user to organise their employees into departments, roles and define managers for each employee. The application is interactive, driven by a command line interface while the data is stored in a MySQL database, allowing for future retrieval and modification of the data. The ultimate goal is to allow the user to manage their business users by creating a rudimentary CMS.
 
 ---
 
@@ -25,7 +25,7 @@
 
 The motivation behind this project was to begin to work the concepts of developing and maintaining a Content Management Systems (CMS). 
 
-The application is designed to prompt the user to perform various activities around the data management of departments, roles and employees; this includes viewing, adding or changing the users assigned roles or managers, or adding new departments to assign employees to.
+The application is designed to prompt the user to perform various activities around the data management of departments, roles and employees; this includes viewing, adding or updating the users assigned roles or managers, adding new departments to assign employees to and deleting departments.
 
 The application is command line driven, and simple to use, allowing for data to be quickly added to the database, or for user records to be updated as dictated by business requirements. It provides a functional CMS for the storing of employee data, allowing a user to quickly add users to the database or assign them a defined role.
 
@@ -33,36 +33,41 @@ Developing and maintaing CMS platforms is a core developer activity, as is suppl
 
 Using a supplied example database schema, this schema was expanded on and used as the basis for creating a MySQL based database platform for storing the data used by the application.
 
-
+---
 
 ## Development
 
 ### Web development technologies
 
-Development of the project was centered around using Express, a back end web application for Node.js that is installed using the node package manager (npm).
+Development of the project was centered around using Inquirer, a back end web application for Node.js that is installed using the node package manager (NPM), and MySQL.
 
-Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications.
+Inquirer is an NPM package that provides an easy way to capture user input in your Node. js command line interface applications.
 
 Node.js, an open-source, cross-platform, back-end JavaScript runtime environment that runs on the V8 engine and executes JavaScript code outside a web browser.
 
-This application has been deployed on Heroku, a Cloud Application Platform as a Service (PaaS) that supports several programming languages including Node.
+MySQL is an open-source relational database management system.
  
 Links to the languges and tools used to build this project are included below:
 
 * Javascript ES6
-* Express
-    * https://expressjs.com/
 * Node.js
     * https://nodejs.org/
-* npm
+* MySQL
+    * https://www.mysql.com/
+* NPM
     * https://www.npmjs.com/
-* Heroku
-    * https://www.heroku.com/
+* NPM Packages
+    * Dotenv
+        * https://www.npmjs.com/package/dotenv
+    * Inquirer
+        * https://www.npmjs.com/package/inquirer
+    * MySQL2
+        * https://www.npmjs.com/package/mysql2
 
 ### Challenges
 
-The development of this application required the use of Node.js and npm, including the installation of the Express.js package.
-In my previous projects I have used GitHub to deploy my applications, however GitHub pages will not execute any server side code; this meant I had to use another web application. For this project I deployed my application using Heroku.
+The development of this application required the use of MySQL, Node.js and several NPM packages, including the installation of Dotenv, Inquirer and MySQL2.
+Usind MySQL to develop a working database schema and functions that successfully mainpulated the database was also new for me. The syntax required for MySQL to function properly is very specific and I had to ensure all functions to create or edit the database were syntactically correct to avoid errors.
 These were new technologies for me as a web developer and required testing and research to understand these tools in order to implement them to create a working project for other users.
 
 ## Future Development Opportunities
@@ -89,15 +94,9 @@ Finally, applying a more consistent branding experience to the resulting UI that
 
 ---
 
-### Deployed Application Link:
-
-* https://serene-temple-28914.herokuapp.com/
-
----
-
 ### Repository Link:
 
-* https://github.com/blmccavanagh/Note-Taker
+* https://github.com/blmccavanagh/Employee-Tracker
 
 ---
 
@@ -105,20 +104,22 @@ Finally, applying a more consistent branding experience to the resulting UI that
 
 ### Application Screenshots:
 
-*Note Taker User Interface introduction, adding a note using the UI.* 
+<div align="center">
+
+*Employee Tracker questions asked in the terminal*
 
 </div>
 
-![Note Taker Demo](./assets/images/README/note-taker-1.gif)
+![Terminal Screenshot](./images/README/employee-tracker-terminal-screenshot.jpg)
 
 ---
 
 <div align="center">
 
-*Retrieveing saved notes, switching between saved notes and deleting notes using the UI.*
+*Employee Tracker walkthrough video*
 
 </div>
 
-![Note Taker Demo](./assets/images/README/note-taker-2.gif)
+<a href="https://drive.google.com/file/d/1-UlyNw31cYbMXfz3O-VtWlsBtHNfwZqI/view?usp=sharing">Click here to watch the video!</a>
 
 ---

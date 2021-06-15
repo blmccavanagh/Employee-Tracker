@@ -15,7 +15,7 @@ connection.connect(async (err) => {
     console.log(`connected as id ${connection.threadId}`);
 });
 
-// allows use of promises/asycn + await with mysql
+// allows use of promises/async + await with mysql
 connection.query = util.promisify(connection.query);
 
 module.exports = connection;
